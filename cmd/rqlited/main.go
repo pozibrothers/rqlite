@@ -222,20 +222,9 @@ func main() {
 		log.Fatalf("failed to parse Raft open timeout %s: %s", raftOpenTimeout, err.Error())
 	}
 
-	// Determine join addresses, if necessary.
-	ja, err := store.JoinAllowed(dataPath)
+	joins, err := determineJoinAddresses()
 	if err != nil {
-		log.Fatalf("unable to determine if join permitted: %s", err.Error())
-	}
-
-	var joins []string
-	if ja {
-		joins, err = determineJoinAddresses()
-		if err != nil {
-			log.Fatalf("unable to determine join addresses: %s", err.Error())
-		}
-	} else {
-		log.Println("node is already member of cluster, skip determining join addresses")
+		log.Fatalf("unable to determine join addresses: %s", err.Error())
 	}
 
 	// Now, open it.

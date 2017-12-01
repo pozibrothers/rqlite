@@ -418,11 +418,6 @@ func (s *Store) Stats() (map[string]interface{}, error) {
 		dbStatus["path"] = ":memory:"
 	}
 
-	nodes, err := s.Nodes()
-	if err != nil {
-		return nil, err
-	}
-
 	status := map[string]interface{}{
 		"raft":               s.raft.Stats(),
 		"addr":               s.Addr().String(),
@@ -432,7 +427,6 @@ func (s *Store) Stats() (map[string]interface{}, error) {
 		"heartbeat_timeout":  s.HeartbeatTimeout.String(),
 		"snapshot_threshold": s.SnapshotThreshold,
 		"meta":               s.meta,
-		"peers":              nodes,
 		"dir":                s.raftDir,
 		"sqlite3":            dbStatus,
 		"db_conf":            s.dbConf,
