@@ -40,8 +40,8 @@ type Store interface {
 	// Join joins the node with the given ID, reachable at addr, to this node.
 	Join(id, addr string) error
 
-	// Remove removes the node, specified by addr, from the cluster.
-	Remove(addr string) error
+	// Remove removes the node, specified by ID, from the cluster.
+	Remove(id string) error
 
 	// Leader returns the Raft leader of the cluster.
 	Leader() string
@@ -347,13 +347,13 @@ func (s *Service) handleRemove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	remoteAddr, ok := m["addr"]
+	remoteID, ok := m["id"]
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	if err := s.store.Remove(remoteAddr); err != nil {
+	if err := s.store.Remove(remoteID); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
